@@ -1,16 +1,17 @@
 <template>
-  <div class="info-panel" @click="modalState.isOpen = !modalState.isOpen" :class="isActive ? 'info-panel--active' : ''">
+  <div class="info-panel" @click="modalIsOpen = !modalIsOpen" :class="isActive ? 'info-panel--active' : ''">
     <span class="name" :data-name="name">
-        <span class="emoji">{{ getEmoji(name) }}</span>
-        <span class="text">{{ getNameText(name) }}</span>
+        <span class="emoji">{{ emoji }}</span>
+        <span class="text">{{ name }}</span>
     </span>
-    <div :style="'pointer-events: ' + (modalState.isOpen ? 'all' : 'none') + ';' +
-    'transform: translateY(' + (modalState.isOpen ? '0' : '150%') + ');'"
-         class="info-panel__description">
+    <div :style="'pointer-events: ' + (modalIsOpen ? 'all' : 'none') + ';' +
+    'transform: translateY(' + (modalIsOpen ? '0' : '150%') + ');'"
+         class="info-panel__description"
+    >
       <div class="close"></div>
       <div class="title">
-        <div class="emoji">{{ getEmoji(name) }}</div>
-        <div class="text">{{ getNameText(name) }}</div>
+        <div class="emoji">{{ emoji }}</div>
+        <div class="text">{{ name }}</div>
       </div>
       <div class="content">
         <slot></slot>
@@ -19,31 +20,21 @@
   </div>
 </template>
 
-<script setup>
+<script>
 
-import {defineNuxtComponent} from "nuxt/app";
-
-defineProps(["name", "isActive"])
-
-defineNuxtComponent({
-  name: "InfoPanel",
-});
-
-let modalState = reactive({
-  isOpen: false
-});
-
-let getEmoji = (baseName) => baseName.split(" ").pop()
-let getNameText = (baseName) => {
-  let parts = baseName.split(" ")
-  parts.pop()
-  return parts.join(" ")
+export default {
+  name: 'InfoPanel',
+  props: ['name', 'emoji', 'isActive'],
+  data () {
+    return {
+      modalIsOpen: false
+    }
+  }
 }
 
 </script>
 
 <style scoped lang="scss">
-@import "~/assets/css/base.scss";
 
 .info-panel {
   display: flex;
